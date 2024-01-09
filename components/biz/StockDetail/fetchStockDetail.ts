@@ -20,6 +20,7 @@ export const fetchStockDetail = async (stockId: string): Promise<StockDetail> =>
   const stock = res.result.data[0];
 
   const [code, sType] = stockId.split('.');
+  console.log(stock);
 
   return {
     id: stock.SECUCODE,

@@ -42,7 +42,7 @@ const nonCurrentDebtItemKeys = Object.keys(NON_CURRENT_DEBT) as K[];
 const assetItemKeys = [...currentAssetItemKeys, ...nonCurrentAssetItemKeys];
 const debtItemKeys = [...currentDebtItemKeys, ...nonCurrentDebtItemKeys];
 
-const sheetType2Keys: Record<SheetType, Array<keyof typeof ACCOUNT_ITEM>> = {
+export const sheetType2Keys: Record<SheetType, Array<keyof typeof ACCOUNT_ITEM>> = {
   'asset': assetItemKeys,
   'debt': debtItemKeys,
   'current-asset': currentAssetItemKeys,
@@ -52,7 +52,6 @@ const sheetType2Keys: Record<SheetType, Array<keyof typeof ACCOUNT_ITEM>> = {
 };
 
 export interface CommonGraphProps {
-  type: SheetType;
   reports: FinancialReportData[];
 }
 
@@ -63,14 +62,19 @@ interface ChartDataItem {
   value: number;
 }
 
-const getValidItems = (report: FinancialReportData, type: SheetType) => {
-  const total: number = Number(report[ACCOUNT_ITEM[totalKeyRecord[type]]]) || 0;
+interface GetValidItemsParams {
+  report: FinancialReportData;
+  accountItemKeys: Array<keyof typeof ACCOUNT_ITEM>;
+  total: number;
+  minPercent?: number;
+}
 
-  const datas = sheetType2Keys[type]
+const getValidItems = ({ report, total, accountItemKeys, minPercent = 0 }: GetValidItemsParams) => {
+  const datas = accountItemKeys
     .map<ChartDataItem | undefined>((key) => {
       const value = (Number(report[ACCOUNT_ITEM[key]]) || 0);
       const percent = (Number(report[ACCOUNT_ITEM[key]]) || 0) / total * 100;
-      if (percent > 5) {
+      if (percent > minPercent) {
         const [, , chinese] = key.split('-');
         return {
           year: String(report['REPORT_YEAR']),
@@ -97,15 +101,26 @@ const getValidItems = (report: FinancialReportData, type: SheetType) => {
     .sort((a, b) => a.value - b.value);
 };
 
-export const getLineData = (reports: FinancialReportData[], type: SheetType) => {
+interface GetLineDataParams extends Pick<GetValidItemsParams, 'accountItemKeys' | 'minPercent'> {
+  reports: FinancialReportData[];
+  totals: number[];
+}
+
+export const getLineData = ({ reports, totals, accountItemKeys, minPercent }: GetLineDataParams) => {
   const dataKeySet = new Set<string>();
   const valueMap = new Map<string, Record<string, number>>();
 
   const data = reports
     .map((_, index) => {
       // 倒着计算
-      const report = reports[reports.length - index - 1];
-      const items = getValidItems(report, type);
+      const cur = reports.length - index - 1;
+      const report = reports[cur];
+      const items = getValidItems({
+        report,
+        total: totals[cur],
+        accountItemKeys,
+        minPercent,
+      });
       const entries = items.map(({ type, percent }) => [type, percent]).concat([['year', items[0].year]]);
       valueMap.set(items[0].year, Object.fromEntries(items.map(({ type, value }) => [type, value])));
       items.forEach(({ type }) => dataKeySet.add(type));
@@ -121,9 +136,9 @@ export const getLineData = (reports: FinancialReportData[], type: SheetType) => 
         const aIndex = data.findLastIndex((item) => a in item);
         const bIndex = data.findLastIndex((item) => b in item);
         if (aIndex !== bIndex) {
-          return aIndex - bIndex;
+          return bIndex - aIndex;
         }
-        return data[aIndex][a] - data[bIndex][b];
+        return data[aIndex][b] - data[bIndex][a];
       }),
   };
 };

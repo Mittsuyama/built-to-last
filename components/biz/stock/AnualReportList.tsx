@@ -2,7 +2,6 @@ import { memo } from 'react';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -42,15 +41,17 @@ export const AnualReportList = memo<AnualReportListProps>(async ({ code }) => {
           公司年度报告
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 overflow-y-auto">
+      <CardContent className="flex-1 overflow-x-hidden overflow-y-auto">
         {
           list.map(({ art_code, title, notice_date }) => (
-            <div className="flex justify-between" key={art_code}>
-              <AnualReportLink
-                art_code={art_code}
-                title={`${Number(notice_date.split(' ')[0].split('-')[0]) - 1} - ${title}`}
-              />
-              <div className="text-muted-foreground text-sm hidden lg:block">
+            <div className="flex justify-between overflow-hidden gap-4" key={art_code}>
+              <div className="flex-1 overflow-hidden">
+                <AnualReportLink
+                  art_code={art_code}
+                  title={`${Number(notice_date.split(' ')[0].split('-')[0]) - 1} - ${title}`}
+                />
+              </div>
+              <div className="flex-none text-muted-foreground text-sm hidden md:block">
                 {notice_date.split(' ')[0]}
               </div>
             </div>

@@ -1,13 +1,8 @@
 import { memo } from 'react';
-import { Github, Dices, Menu } from 'lucide-react';
+import { Github, Dices } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { StockDetailMenu } from '@/components/biz/StockDetail/DetailMenu';
 import { Button } from '@/components/ui/button';
 import { Search } from '@/components/biz/stock/Search';
 import { ThemeToggle } from '@/components/biz/layout/ThemeToggle';
@@ -30,33 +25,17 @@ interface StockInfoPageProps {
 }
 
 const StockInfoPage = memo<StockInfoPageProps>(async (props) => {
+  const [code, sType] = props.params.slug;
+
   return (
     <div className="w-full h-full flex flex-col">
-      <header className="flex justify-between items-center px-4 lg:px-10 flex-none border-b h-16">
-        <div className="md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="w-5 h-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Lucky>
-                  手气不错
-                </Lucky>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="https://github.com/mittsuyama" target="_blank">
-                  GitHub
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="flex items-center gap-4 text-primary/70 hover:text-primary/50">
+      <header className="flex justify-between items-center pl-2 pr-4 md:px-4 lg:px-10 flex-none border-b h-16">
+        <div className="flex items-center gap-2 text-primary/70 hover:text-primary/50">
+          <div className="md:hidden">
+            <StockDetailMenu code={code} sType={sType} />
+          </div>
           <Link
-            className="font-extrabold font-serif tracking-wide pr-4 text-primary hover:text-primary/80"
+            className="font-extrabold font-serif tracking-wide md:px-2 text-primary hover:text-primary/80"
             href="/"
           >
             基业长青

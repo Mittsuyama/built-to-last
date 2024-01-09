@@ -107,6 +107,8 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
             sType = 'SZ';
           } else if (securityTypeName === '沪A') {
             sType = 'SH';
+          } else if (securityTypeName === '京A') {
+            sType = 'BJ';
           }
           if (stock) {
             setLatest([stock, ...latest.filter(item => item.code !== stock.code).slice(0, 4)]);

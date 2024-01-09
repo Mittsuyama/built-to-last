@@ -1,6 +1,7 @@
 'use client';
 import { useMemoizedFn } from 'ahooks';
 import { memo } from 'react';
+import { Button } from '@/components/ui/button';
 import { fetchPdfUrl } from './fetchPdfUrl';
 
 interface AnualReportLinkProps {
@@ -15,11 +16,10 @@ export const AnualReportLink = memo<AnualReportLinkProps>(({ art_code, title }) 
   });
 
   return (
-    <div
-      onClick={onClick}
-      className="mb-3 w-full whitespace-nowrap overflow-hidden text-ellipsis hover:underline text-sm font-bold cursor-pointer underline-offset-4"
-    >
+    <div onClick={onClick} className="mb-1 w-full text-ellipsis">
       {title}
+      {/* <Button variant="link" className="p-0 h-7"> */}
+      {/* </Button> */}
     </div>
   );
 });

@@ -1,15 +1,15 @@
 'use client';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, ReactNode } from 'react';
 import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatFinancialNumber } from '@/lib/format';
-import { getLineData, CommonGraphProps, sheetType2Title, totalKeyRecord } from './common';
+import { CommonGraphProps, sheetType2Title, totalKeyRecord, SheetType, getLineData, sheetType2Keys } from './common';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import { ACCOUNT_ITEM } from '@/constants/account-item';
 
 interface CustomTooltipProps {
@@ -56,26 +56,33 @@ const CustomTooltip = ({ active, payload, valueMap }: CustomTooltipProps) => {
   return null;
 };
 
-const ReportDataLine = memo((props: CommonGraphProps) => {
-  const { reports, type } = props;
+interface ReportDataLineCardProps extends CommonGraphProps {
+  title: ReactNode;
+  desc?: ReactNode;
+  totals: number[];
+  accountItemKeys: Array<keyof typeof ACCOUNT_ITEM>;
+  minPercent?: number;
+}
+
+export const ReportDataLineCard = memo<ReportDataLineCardProps>((props) => {
+  const { title, desc, totals, reports, accountItemKeys, minPercent  } = props;
 
   const { data, dataKeys, valueMap } = useMemo(
-    () => getLineData(reports, type),
-    [reports, type],
+    () => getLineData({ reports, accountItemKeys, totals, minPercent }),
+    [reports, accountItemKeys, totals, minPercent],
   );
-
-  const total = Number(reports[0][ACCOUNT_ITEM[totalKeyRecord[type]]]) || 0;
-  const lastYearTotal = Number(reports[1][ACCOUNT_ITEM[totalKeyRecord[type]]]) || 0;
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base lg:text-xl">
-          {sheetType2Title[type]}
+          {title}
         </CardTitle>
-        <CardDescription>
-          {`￥${formatFinancialNumber(total)}，同比增长 ${((total - lastYearTotal) / lastYearTotal * 100).toFixed(2)}%`}
-        </CardDescription>
+        {desc && (
+          <CardDescription>
+            {desc}
+          </CardDescription>
+        )}
       </CardHeader>
       <CardContent className="h-[150px] lg:h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -91,7 +98,7 @@ const ReportDataLine = memo((props: CommonGraphProps) => {
                     dataKey={dataKey}
                     strokeWidth={1.5}
                     dot={{ r: 2 }}
-                    stroke={`hsl(var(--primary) / ${1 / dataKeys.length * (index % dataKeys.length + 1)})`}
+                    stroke={`hsl(var(--primary) / ${1 / dataKeys.length * ((dataKeys.length - index - 1) % dataKeys.length + 1)})`}
                   />
                 );
               })
@@ -103,7 +110,25 @@ const ReportDataLine = memo((props: CommonGraphProps) => {
   );
 });
 
-ReportDataLine.displayName = 'ReportDataLine';
+ReportDataLineCard.displayName = 'ReportDataLineCard';
 
-export { ReportDataLine as Line, };
+export const AssetLine = memo<CommonGraphProps & { sheetType: SheetType }>((props) => {
+  const { reports, sheetType } = props;
+
+  const total = Number(reports[0][ACCOUNT_ITEM[totalKeyRecord[sheetType]]]) || 0;
+  const lastYearTotal = Number(reports[1][ACCOUNT_ITEM[totalKeyRecord[sheetType]]]) || 0;
+
+  return (
+    <ReportDataLineCard
+      totals={reports.map((report) => Number(report[ACCOUNT_ITEM[totalKeyRecord[sheetType]]]) || 0)}
+      reports={reports}
+      title={sheetType2Title[sheetType]}
+      desc={`${reports[0]['REPORT_YEAR']} 年￥${formatFinancialNumber(total)}，同比增长 ${((total - lastYearTotal) / lastYearTotal * 100).toFixed(2)}%`}
+      accountItemKeys={sheetType2Keys[sheetType]}
+      minPercent={5}
+    />
+  );
+});
+
+AssetLine.displayName = 'AssetLine';
 

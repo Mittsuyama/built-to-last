@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { MoonIcon, SunIcon } from 'lucide-react'
+import { MoonIcon, SunIcon, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { Button } from '@/components/ui/button'
@@ -12,16 +12,20 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export const ThemeToggle = React.memo(({ className }: { className?: string }) => {
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={className}>
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
+        <div className={className}>
+          <Button variant="ghost" size="icon">
+            {
+              theme !== 'dark'
+                ? <Sun className="w-5 h-5" />
+                : <Moon className="w-5 h-5" />
+            }
+          </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
