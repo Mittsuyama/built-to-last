@@ -16,3 +16,5 @@ export const Spin = memo<SpinProps>((props) => {
   );
 });
 
+Spin.displayName = 'Spin';
+
