@@ -3,18 +3,20 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ProfitabilityCard } from '@/components/biz/stock/ProfitabilityCard';
-import { MllAndROE } from '@/components/biz/stock/MllAndROE';
-import { AssetLine } from '@/components/biz/ReportDataGraph/Line';
+import { AssetLine, ReportDataLineCard } from '@/components/biz/ReportDataGraph/Line';
 import { SheetType } from '@/components/biz/ReportDataGraph/common';
-import { Business } from '@/components/biz/stock/Business';
-import { AnualReportList } from '@/components/biz/stock/AnualReportList';
-import { ClientSideTitle } from '@/components/biz/stock/ClientSideTitle';
+import {
+  AnualReportList,
+  ClientSideTitle,
+  ToggleFavButton,
+  Business,
+  MllAndROE,
+  ProfitabilityCard,
+} from '@/components/biz/stock';
 import { fetchTreeFinancialReportsData } from './fetchStockReportData';
 import { fetchLeadingIndex } from './fetchStockLeadingIndex';
 import { fetchStockDetail } from './fetchStockDetail';
 import { fetchBoardList } from './fetchBoardList';
-import { Spin } from '@/components/ui/Spin';
 
 interface StockInfoPageProps {
   params: {
@@ -100,8 +102,9 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
           <StockBaseInfo name={name} stockId={stockId} />
         </div>
         <div className="hidden md:flex items-center gap-2 lg:gap-4 text-xs md:text-sm">
+          <ToggleFavButton stockId={stockId} />
           <Link href={`https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=${sType}${code}#/cwfx`} target="_blank">
-            <Button variant="default">
+            <Button variant="outline">
               其他数据
             </Button>
           </Link>
@@ -113,22 +116,45 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4 md:mb-6">
-        <MllAndROE reports={reports} />
-        <ProfitabilityCard reports={reports} />
-        <div className="md:col-span-2 lg:col-span-1 h-[340px]">
+        <div className="min-h-[330px]">
+          <MllAndROE reports={reports} />
+        </div>
+        <div className="min-h-[330px]">
+          <ProfitabilityCard reports={reports} />
+        </div>
+        <div className="md:col-span-2 lg:col-span-1 min-h-[340px]">
           <Business stockId={stockId} />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 md:mb-6">
-        {sheets.map((sheetType) => <AssetLine key={sheetType} reports={reports} sheetType={sheetType} />)}
+        {sheets.map((sheetType) => (
+          <div className="min-h-[330px]" key={sheetType}>
+            <AssetLine
+              key={sheetType}
+              reports={reports}
+              sheetType={sheetType}
+            />
+          </div>
+        ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6">
-        <div className="grid lg:col-span-3 lg:grid-cols-2 gap-6">
-          <div className=" h-[340px]">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6 items-stretch">
+        <div className="lg:col-span-3 grid md:grid-cols-2 lg:grid-cols-2 gap-6 items-stretch">
+          <div className="min-h-[330px]">
+            <ReportDataLineCard
+              reports={reports}
+              title="现金流量表"
+              accountItemKeys={[
+                'x-jyhdcsdxjllje-经营活动产生的现金流量净额',
+                'x-tzhdcsdxjllje-投资活动产生的现金流量净额',
+                'x-czhdcsdxjllje-筹资活动产生的现金流量净额',
+              ]}
+            />
+          </div>
+          <div className="h-[330px]">
             <AnualReportList code={code} />
           </div>
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 h-[330px]">
           <ReportBaseDataTable name={name} stockId={stockId} industry={industry} />
         </div>
       </div>

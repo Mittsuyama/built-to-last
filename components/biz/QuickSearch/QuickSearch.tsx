@@ -6,14 +6,18 @@ import {
   memo,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
 import { useMemoizedFn, useDebounceFn } from 'ahooks';
-import { atom, useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { Building2, CandlestickChart } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { SearchStockItem } from '@/types';
+import { favStockListAtom } from '@/models/stock';
 import { Badge } from "@/components/ui/badge"
 import {
+  Command,
   CommandDialog,
   CommandGroup,
   CommandInput,
@@ -22,18 +26,13 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 import { Spin } from '@/components/ui/Spin';
-import { searchStock, SearchStockItem } from './searchStock';
+import { searchStock } from './searchStock';
 
 interface CommandItem {
   Icon: FC<{ className?: string }>;
   label: string;
   key: string;
 }
-
-const suggestList: CommandItem[] = [
-  { Icon: CandlestickChart, label: '沪深 300', key: '000001' },
-  { Icon: CandlestickChart, label: '上证 300', key: '000300' },
-];
 
 const latestSearchAtom = atomWithStorage<SearchStockItem[]>(
   'latest-search',
@@ -44,9 +43,11 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
   const { children } = props;
   const [value, setValue] = useState('');
   const [open, setOpen] = useState(false);
+  const favStockList = useAtomValue(favStockListAtom);
   const [latest, setLatest] = useAtom(latestSearchAtom);
   const [searching, setSearching] = useState(false);
   const [res, setRes] = useState<SearchStockItem[]>([]);
+
   const router = useRouter();
 
   const keyDownHandler = useMemoizedFn((e: KeyboardEvent) => {
@@ -94,31 +95,22 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
     setOpen(isOpen);
   });
 
-  const searchStockItemRender = useMemoizedFn((list: SearchStockItem[]) => {
-    return list.map(({ name, code, abbr, securityTypeName }) => (
+  const searchStockItemRender = useMemoizedFn((list: SearchStockItem[], suffix: string) => {
+    return list.map(({ name, stockId, sType, code }) => (
       <CommandItem
-        value={`${name}-${code}-${abbr}-${securityTypeName}`}
-        key={`${name}-${code}-${abbr}-${securityTypeName}`}
-        onSelect={(value) => {
-          const [, code] = value.split('-');
-          let sType = 'UNKNOWN';
-          const stock = list.find((item) => item.code == code);
-          if (securityTypeName === '深A') {
-            sType = 'SZ';
-          } else if (securityTypeName === '沪A') {
-            sType = 'SH';
-          } else if (securityTypeName === '京A') {
-            sType = 'BJ';
-          }
+        value={`${stockId}.${name}.${suffix}`}
+        key={`${stockId}.${name}.${suffix}`}
+        onSelect={() => {
+          const stock = list.find((item) => item.stockId == stockId);
           if (stock) {
-            setLatest([stock, ...latest.filter(item => item.code !== stock.code).slice(0, 4)]);
-            router.push(`/stock/${sType.toUpperCase()}/${stock.code}`);
+            setLatest([stock, ...latest.filter(item => item.stockId !== stockId).slice(0, 5)]);
+            router.push(`/stock/${sType.toUpperCase()}/${code}`);
           }
         }}
       >
         <Building2 className="mr-2 h-4 w-4" />
         <span className="mr-2">{name}</span>
-        <Badge className="font-normal" variant="outline">{securityTypeName}</Badge>
+        <Badge className="font-normal" variant="outline">{sType}</Badge>
       </CommandItem>
     ));
   });
@@ -127,54 +119,49 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
     <>
       {children}
       <CommandDialog open={open} onOpenChange={onOpenChange}>
-        <CommandInput
-          placeholder="输入名字、代码、或拼音首字母进行搜索..."
-          value={value}
-          onValueChange={onValueChange}
-        />
-        {
-          searching
-            ? (
-              <CommandList key="searching">
-                <Spin className="block my-4" />
-              </CommandList>
-            )
-            : value && !res.length
+        <Command shouldFilter={false}>
+          <CommandInput
+            placeholder="输入名字、代码、或拼音首字母进行搜索..."
+            value={value}
+            onValueChange={onValueChange}
+          />
+          {
+            searching
               ? (
-                <CommandList key="no-result">
-                  <div className="my-4 flex justify-center items-center text-sm">
-                    无搜索内容
-                  </div>
+                <CommandList key="searching">
+                  <Spin className="block my-4" />
                 </CommandList>
-               )
-               : (
-                  <CommandList key="has-result">
-                    {!!res.length && (
-                      <CommandGroup heading="搜索结果">
-                        {searchStockItemRender(res)}
-                      </CommandGroup>
-                    )}
-                    {!!latest.length && !value && (
-                      <CommandGroup heading="最近搜索">
-                        {searchStockItemRender(latest)}
-                      </CommandGroup>
-                    )}
-                    {!value && (
-                      <CommandGroup heading="推荐内容">
-                        {
-                          suggestList.map(({ label, Icon, key }) => (
-                            <CommandItem key={key}>
-                              <Icon className="mr-2 h-4 w-4" />
-                              <span>{label}</span>
-                            </CommandItem>
-                          ))
-                        }
-                      </CommandGroup>
-                    )}
-                    <CommandSeparator />
+              )
+              : value && !res.length
+                ? (
+                  <CommandList key="no-result">
+                    <div className="my-4 flex justify-center items-center text-sm">
+                      无搜索内容
+                    </div>
                   </CommandList>
-                )
-        }
+                 )
+                 : (
+                    <CommandList key="has-result">
+                      {!!res.length && (
+                        <CommandGroup heading="搜索结果">
+                          {searchStockItemRender(res, 'res')}
+                        </CommandGroup>
+                      )}
+                      {!!latest.length && !value && (
+                        <CommandGroup heading="最近搜索">
+                          {searchStockItemRender(latest, 'latest')}
+                        </CommandGroup>
+                      )}
+                      {!value && !!favStockList.length && (
+                        <CommandGroup heading="收藏内容">
+                          {searchStockItemRender(favStockList, 'fav')}
+                        </CommandGroup>
+                      )}
+                      <CommandSeparator />
+                    </CommandList>
+                  )
+          }
+        </Command>
       </CommandDialog>
     </>
   );

@@ -26,3 +26,11 @@ export interface StockDetail extends StockBaseInfo {
   grossProfitMargin: number;
 }
 
+export interface SearchStockItem {
+  stockId: string;
+  name: string;
+  code: string;
+  /** 交易所名称 */
+  sType: string;
+}
+

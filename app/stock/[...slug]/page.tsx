@@ -25,13 +25,13 @@ interface StockInfoPageProps {
 }
 
 const StockInfoPage = memo<StockInfoPageProps>(async (props) => {
-  const [code, sType] = props.params.slug;
+  const [sType, code] = props.params.slug;
 
   return (
     <div className="w-full h-full flex flex-col">
       <header className="flex justify-between items-center pl-2 pr-4 md:px-4 lg:px-10 flex-none border-b h-16">
         <div className="flex items-center gap-2 text-primary/70 hover:text-primary/50">
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
             <StockDetailMenu code={code} sType={sType} />
           </div>
           <Link

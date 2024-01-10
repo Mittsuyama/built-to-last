@@ -65,16 +65,16 @@ interface ChartDataItem {
 interface GetValidItemsParams {
   report: FinancialReportData;
   accountItemKeys: Array<keyof typeof ACCOUNT_ITEM>;
-  total: number;
+  total?: number;
   minPercent?: number;
 }
 
-const getValidItems = ({ report, total, accountItemKeys, minPercent = 0 }: GetValidItemsParams) => {
+const getValidItems = ({ report, total, accountItemKeys, minPercent }: GetValidItemsParams) => {
   const datas = accountItemKeys
     .map<ChartDataItem | undefined>((key) => {
       const value = (Number(report[ACCOUNT_ITEM[key]]) || 0);
-      const percent = (Number(report[ACCOUNT_ITEM[key]]) || 0) / total * 100;
-      if (percent > minPercent) {
+      const percent = (Number(report[ACCOUNT_ITEM[key]]) || 0) / (total || 1) * 100;
+      if (typeof minPercent === 'undefined' || percent > minPercent) {
         const [, , chinese] = key.split('-');
         return {
           year: String(report['REPORT_YEAR']),
@@ -89,21 +89,24 @@ const getValidItems = ({ report, total, accountItemKeys, minPercent = 0 }: GetVa
 
   const totalValue = datas.reduce((pre, cur) => pre + (cur?.value || 0), 0);
   const totalPercent = datas.reduce((pre, cur) => pre + (cur?.percent || 0), 0);
-
-  return datas
-    .concat({
+  const restItem = total
+    ? [{
       year: String(report['REPORT_YEAR']),
       type: '剩余',
       value: total - totalValue,
       percent: 100 - totalPercent,
-    })
+    }]
+    : [];
+
+  return datas
+    .concat(restItem)
     .filter((data): data is ChartDataItem => Boolean(data))
     .sort((a, b) => a.value - b.value);
 };
 
 interface GetLineDataParams extends Pick<GetValidItemsParams, 'accountItemKeys' | 'minPercent'> {
   reports: FinancialReportData[];
-  totals: number[];
+  totals?: number[];
 }
 
 export const getLineData = ({ reports, totals, accountItemKeys, minPercent }: GetLineDataParams) => {
@@ -117,7 +120,7 @@ export const getLineData = ({ reports, totals, accountItemKeys, minPercent }: Ge
       const report = reports[cur];
       const items = getValidItems({
         report,
-        total: totals[cur],
+        total: totals?.[cur],
         accountItemKeys,
         minPercent,
       });

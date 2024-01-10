@@ -20,10 +20,10 @@ export const formatFinancialNumber = (data: unknown, options: FormatFinancialNum
     }
     return 'NaN';
   }
-  if (num > 1_0000_0000) {
+  if (Math.abs(num) > 1_0000_0000) {
     return `${(num / 1_0000_0000).toFixed(2)} 亿`;
   }
-  if (num > 1_0000) {
+  if (Math.abs(num) > 1_0000) {
     return `${(num / 1_0000).toFixed(2)} 万`;
   }
   return `${num.toFixed(2)}${options.unit === 'none' ? '' : options.unit || ''}`;

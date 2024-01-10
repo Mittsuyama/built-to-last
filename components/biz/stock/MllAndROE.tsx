@@ -1,6 +1,7 @@
 'use client';
+import { Separator } from '@/components/ui/separator';
 
-import { memo } from 'react';
+import { memo, Fragment } from 'react';
 import { BarChart, Bar, Tooltip, ResponsiveContainer, YAxis, XAxis } from 'recharts';
 import { FinancialReportData } from '@/types';
 import {
@@ -37,39 +38,61 @@ export const MllAndROE = memo<MllAndROEProps>((props) => {
   const roe = reports.map((item) => ({ year: item['REPORT_YEAR'], value: item['ROEKCJQ'] }))
   const mll = reports.map((item) => ({ year: item['REPORT_YEAR'], value: item['XSMLL'] }))
   const list = [
-    { data: mll, name: '毛利率' },
-    { data: roe, name: '加权扣非 ROE' },
+    {
+      data: mll,
+      name: '毛利率',
+      domain: [0, 100],
+    },
+    {
+      data: roe,
+      name: '加权扣非 ROE',
+      domain: [
+        0,
+        Math.max(
+          roe.reduce((pre, cur) => typeof cur.value === 'number' && cur.value > pre ? cur.value : pre, Number.MIN_SAFE_INTEGER),
+          50
+        )
+      ],
+    },
   ];
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-none">
         <CardTitle className="text-base lg:text-xl">
           毛利率和 ROE
         </CardTitle>
       </CardHeader>
-      <CardContent className="h-[180px] lg:h-[230px] flex items-stretch gap-4 px-4 pb-4">
-        {list.map(({ data, name }) => (
-          <div className="flex-1 flex flex-col" key={name}>
-            <div className="flex-1 overflow-hidden">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ left: 20, right: 20 }}>
-                  <XAxis dataKey="year" scale="point" hide />
-                  <YAxis domain={[0, 100]} hide />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Bar
-                    activeBar={{ fill: 'hsl(var(--primary) / 0.5)' }}
-                    dataKey="value"
-                    fill="hsl(var(--primary)"
-                    background={{ fill: 'hsl(var(--background))' }}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+      <CardContent className="flex-col lg:flex-row flex-1 flex items-stretch gap-6 px-6 pb-4">
+        {list.map(({ data, name, domain }, index) => (
+          <Fragment key={name}>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 overflow-hidden">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={data} margin={{ left: 20, right: 20 }}>
+                    <XAxis dataKey="year" scale="point" hide />
+                    <YAxis domain={domain} hide />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar
+                      activeBar={{ fill: 'hsl(var(--primary) / 0.5)' }}
+                      dataKey="value"
+                      fill="hsl(var(--primary)"
+                      background={{ fill: 'hsl(var(--background))' }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex-none text-center text-muted-foreground text-xs mt-3">
+                {name}
+              </div>
             </div>
-            <div className="flex-none text-center text-muted-foreground text-xs pt-1">
-              {name}
-            </div>
-          </div>
+            {index !== list.length - 1 && (
+              <>
+                <Separator className="block lg:hidden" orientation="horizontal" />
+                <Separator className="hidden lg:block" orientation="vertical" />
+              </>
+            )}
+          </Fragment>
         ))}
       </CardContent>
     </Card>

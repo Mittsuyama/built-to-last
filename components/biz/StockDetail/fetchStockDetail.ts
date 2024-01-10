@@ -4,6 +4,8 @@ import { StockDetail } from '@/types';
 const url = 'https://datacenter.eastmoney.com/securities/api/data/v1/get';
 
 export const fetchStockDetail = async (stockId: string): Promise<StockDetail> => {
+  const [code, sType] = stockId.split('.');
+
   const search = new URLSearchParams({
     reportName: 'RPT_PCF10_FINANCEMAINFINADATA',
     columns: 'SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,REPORT_DATE,REPORT_TYPE,EPSJB,EPSKCJB,EPSXS,BPS,MGZBGJ,MGWFPLR,MGJYXJJE,TOTAL_OPERATEINCOME,TOTAL_OPERATEINCOME_LAST,PARENT_NETPROFIT,PARENT_NETPROFIT_LAST,KCFJCXSYJLR,KCFJCXSYJLR_LAST,ROEJQ,ROEJQ_LAST,XSMLL,XSMLL_LAST,ZCFZL,ZCFZL_LAST,YYZSRGDHBZC_LAST,YYZSRGDHBZC,NETPROFITRPHBZC,NETPROFITRPHBZC_LAST,KFJLRGDHBZC,KFJLRGDHBZC_LAST,TOTALOPERATEREVETZ,TOTALOPERATEREVETZ_LAST,PARENTNETPROFITTZ,PARENTNETPROFITTZ_LAST,KCFJCXSYJLRTZ,KCFJCXSYJLRTZ_LAST,TOTAL_SHARE,FREE_SHARE,EPSJB_PL,BPS_PL,FORMERNAME',
@@ -18,8 +20,6 @@ export const fetchStockDetail = async (stockId: string): Promise<StockDetail> =>
   const response = await fetch(`${url}?${search.toString()}`, { cache: 'force-cache' });
   const res = await response.json();
   const stock = res.result.data[0];
-
-  const [code, sType] = stockId.split('.');
 
   return {
     id: stock.SECUCODE,

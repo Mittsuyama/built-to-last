@@ -211,7 +211,7 @@ export const XJLL_ITEM_TO_KEY = {
   'x-hlbddxjjxjdjwdyx-汇率变动对现金及现金等价物的影响': 'RATE_CHANGE_EFFECT',
   'x-jlr-净利润': 'NETPROFIT',
   'x-jszyhdqckssddxj-减少质押和定期存款所收到的现金': 'REDUCE_PLEDGE_TIMEDEPOSITS',
-  'x-jyhdcsdxjllje-经营活动产生的现金流量净额[operate]': 'NETCASH_OPERATE',
+  'x-jyhdcsdxjllje-经营活动产生的现金流量净额': 'NETCASH_OPERATE',
   'x-jyhdcsdxjllje-经营活动产生的现金流量净额[operatenote]': 'NETCASH_OPERATENOTE',
   'x-jyhdcsdxjlljephxm-经营活动产生的现金流量净额平衡项目': 'OPERATE_NETCASH_BALANCE',
   'x-jyhdcsdxjlljeqtxm-经营活动产生的现金流量净额其他项目[balancenote]': 'OPERATE_NETCASH_BALANCENOTE',

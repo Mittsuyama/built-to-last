@@ -17,9 +17,10 @@ interface CustomTooltipProps {
   payload?: Array<Record<string, any>>;
   label?: string;
   valueMap: Map<string, Record<string, number>>;
+  hiddenPercent?: boolean;
 }
 
-const CustomTooltip = ({ active, payload, valueMap }: CustomTooltipProps) => {
+const CustomTooltip = ({ active, payload, valueMap, hiddenPercent }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="rounded-lg border bg-background p-2 shadow-sm">
@@ -39,9 +40,11 @@ const CustomTooltip = ({ active, payload, valueMap }: CustomTooltipProps) => {
                   <div className="font-bold flex-1 whitespace-nowrap">
                     {item.dataKey}
                   </div>
-                  <div className="flex-none w-[70px]">
-                    {`${item.value.toFixed(2)}%`}
-                  </div>
+                  {!hiddenPercent && (
+                    <div className="flex-none w-[70px]">
+                      {`${item.value.toFixed(2)}%`}
+                    </div>
+                  )}
                   <div className="flex-none w-[70px]">
                     {formatFinancialNumber(valueMap.get(item.payload?.year)?.[item.dataKey])}
                   </div>
@@ -59,7 +62,7 @@ const CustomTooltip = ({ active, payload, valueMap }: CustomTooltipProps) => {
 interface ReportDataLineCardProps extends CommonGraphProps {
   title: ReactNode;
   desc?: ReactNode;
-  totals: number[];
+  totals?: number[];
   accountItemKeys: Array<keyof typeof ACCOUNT_ITEM>;
   minPercent?: number;
 }
@@ -73,8 +76,8 @@ export const ReportDataLineCard = memo<ReportDataLineCardProps>((props) => {
   );
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-none">
         <CardTitle className="text-base lg:text-xl">
           {title}
         </CardTitle>
@@ -84,10 +87,10 @@ export const ReportDataLineCard = memo<ReportDataLineCardProps>((props) => {
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="h-[150px] lg:h-[200px]">
+      <CardContent className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} >
-            <Tooltip content={<CustomTooltip valueMap={valueMap} />} />
+            <Tooltip content={<CustomTooltip valueMap={valueMap} hiddenPercent={!totals} />} />
             {
               dataKeys.map((dataKey, index) => {
                 return (
