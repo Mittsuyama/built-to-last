@@ -150,7 +150,7 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
               ]}
             />
           </div>
-          <div className="h-[330px]">
+          <div className="h-[330px] overflow-x-hidden">
             <AnualReportList code={code} />
           </div>
         </div>
