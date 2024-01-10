@@ -1,10 +1,11 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { useAsyncEffect } from 'ahooks';
 import { Star, StarOff } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { SearchStockItem } from '@/types';
+import { Spin } from '@/components/ui/Spin';
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { favStockListAtom } from '@/models/stock';
 import { fetchStockDetail } from '@/components/biz/StockDetail/fetchStockDetail';
@@ -46,12 +47,14 @@ export const ToggleFavButton = memo<ButtonProps & { stockId: string }>((props) =
   return (
     <Button disabled={!profile} onClick={onClick} {...rest}>
       {
-        isFaved
-          ? <StarOff className="mr-2 w-4 h-4" />
-          : <Star className="mr-2 w-4 h-4" />
+        !profile
+          ? <Spin className="mr-2 w-4 h-4" />
+          : isFaved
+            ? <StarOff className="mr-2 w-4 h-4" />
+            : <Star className="mr-2 w-4 h-4" />
       }
       {
-        isFaved ? '取消收藏' : '收藏'
+        isFaved ? '取消收藏' : '收藏公司'
       }
     </Button>
   );

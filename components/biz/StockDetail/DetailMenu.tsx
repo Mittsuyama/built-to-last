@@ -50,7 +50,7 @@ export const StockDetailMenu = memo<StockDetailMenuProps>(async ({ code, sType }
           </Link>
           <Link
             className="block"
-            href="https://github.com/mittsuyama"
+            href="https://github.com/Mittsuyama/built-to-last"
             target="_blank"
           >
             <Button className="flex w-full mb-2 gap-2" variant="outline" size="lg">

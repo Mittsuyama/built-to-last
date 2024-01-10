@@ -48,7 +48,7 @@ const StockInfoPage = memo<StockInfoPageProps>(async (props) => {
               <Dices className="w-5 h-5" />
             </Button>
           </Lucky>
-          <Link className="hidden md:block" href="https://github.com/mittsuyama" target="_blank">
+          <Link className="hidden md:block" href="https://github.com/Mittsuyama/built-to-last" target="_blank">
             <Button variant="ghost" size="icon">
               <Github className="w-5 h-5" />
             </Button>
