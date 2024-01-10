@@ -38,7 +38,7 @@ export const fetchStockBaseInfoListByFilter = async (params: FilterConfigs): Pro
     filter += `(PE9<=${maxPe})`;
   }
   if (minTotalMarketCAP) {
-    filter += `(TOTAL_MARKET_CAP<=${minTotalMarketCAP})`;
+    filter += `(TOTAL_MARKET_CAP>=${minTotalMarketCAP})`;
   }
   if (minROE) {
     filter += `(ROE_WEIGHT>=${minROE})`;

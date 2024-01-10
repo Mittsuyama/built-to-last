@@ -24,7 +24,7 @@ interface ReportBaseDataTableProps {
   industry: string;
 }
 
-export const ReportBaseDataTable = memo<ReportBaseDataTableProps>(async ({ stockId, name, industry }) => {
+const ReportBaseDataTable = memo<ReportBaseDataTableProps>(async ({ stockId, name, industry }) => {
   const list = await fetchIndustryInfo(stockId, name);
   const names = [name, '行业平均', '行业中值'];
 
@@ -69,4 +69,6 @@ export const ReportBaseDataTable = memo<ReportBaseDataTableProps>(async ({ stock
 });
 
 ReportBaseDataTable.displayName = 'ReportBaseDataTable';
+
+export default ReportBaseDataTable;
 

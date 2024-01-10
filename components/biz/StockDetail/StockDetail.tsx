@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProfitabilityCard } from '@/components/biz/stock/ProfitabilityCard';
@@ -8,18 +9,32 @@ import { AssetLine } from '@/components/biz/ReportDataGraph/Line';
 import { SheetType } from '@/components/biz/ReportDataGraph/common';
 import { Business } from '@/components/biz/stock/Business';
 import { AnualReportList } from '@/components/biz/stock/AnualReportList';
-import { ReportBaseDataTable } from '@/components/biz/stock/ReportBaseDataTable';
 import { ClientSideTitle } from '@/components/biz/stock/ClientSideTitle';
 import { fetchTreeFinancialReportsData } from './fetchStockReportData';
 import { fetchLeadingIndex } from './fetchStockLeadingIndex';
 import { fetchStockDetail } from './fetchStockDetail';
 import { fetchBoardList } from './fetchBoardList';
+import { Spin } from '@/components/ui/Spin';
 
 interface StockInfoPageProps {
   params: {
     slug: string[];
   };
 }
+
+const ReportBaseDataTable = dynamic(
+  () => import('@/components/biz/stock/ReportBaseDataTable'),
+  {
+    loading: () => null,
+  },
+);
+
+const StockBaseInfo = dynamic(
+  () => import('@/components/biz/stock/StockBaseInfo'),
+  {
+    loading: () => null,
+  },
+);
 
 const fetchStockInfo = async (props: StockInfoPageProps) => {
   const { params } = props;
@@ -73,21 +88,16 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
     sType,
     code,
     stockId,
-    ttmPe,
-    totalMarketCap,
   } = await fetchStockInfo(props);
 
   return (
     <>
       <ClientSideTitle title={name} />
-      <div className="flex justify-between items-center mb-4 lg:mb-6 flex-wrap gap-2">
-        <div className="flex items-center gap-2 lg:gap-4">
+      <div className="flex justify-between items-center mb-4 md:mb-6 gap-2">
+        <div className="flex items-center gap-3 md:gap-6 flex-wrap">
           <div className="text-xl lg:text-3xl font-bold pl-1">{name}</div>
           <Badge className="text-xs lg:text-base hover:bg-primary cursor-default">{industry}</Badge>
-          <div className="flex gap-4 text-sm md:text-base text-muted-foreground">
-            <div>TTM PE : {ttmPe}</div>
-            <div>总市值 : {totalMarketCap}</div>
-          </div>
+          <StockBaseInfo name={name} stockId={stockId} />
         </div>
         <div className="hidden md:flex items-center gap-2 lg:gap-4 text-xs md:text-sm">
           <Link href={`https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=${sType}${code}#/cwfx`} target="_blank">
@@ -102,17 +112,17 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4 lg:mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4 md:mb-6">
         <MllAndROE reports={reports} />
         <ProfitabilityCard reports={reports} />
         <div className="md:col-span-2 lg:col-span-1 h-[340px]">
           <Business stockId={stockId} />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 lg:mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 md:mb-6">
         {sheets.map((sheetType) => <AssetLine key={sheetType} reports={reports} sheetType={sheetType} />)}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 lg:mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6">
         <div className="grid lg:col-span-3 lg:grid-cols-2 gap-6">
           <div className=" h-[340px]">
             <AnualReportList code={code} />
