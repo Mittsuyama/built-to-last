@@ -35,8 +35,8 @@ interface MllAndROEProps {
 export const MllAndROE = memo<MllAndROEProps>((props) => {
   const { reports } = props;
 
-  const roe = reports.map((item) => ({ year: item['REPORT_YEAR'], value: item['ROEKCJQ'] }))
-  const mll = reports.map((item) => ({ year: item['REPORT_YEAR'], value: item['XSMLL'] }))
+  const roe = reports.map((item) => ({ name: item['REPORT_YEAR'], value: item['ROEKCJQ'] }))
+  const mll = reports.map((item) => ({ name: item['REPORT_YEAR'], value: item['XSMLL'] }))
   const list = [
     {
       data: mll,
@@ -70,7 +70,7 @@ export const MllAndROE = memo<MllAndROEProps>((props) => {
               <div className="flex-1 overflow-hidden">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data} margin={{ left: 20, right: 20 }}>
-                    <XAxis dataKey="year" scale="point" hide />
+                    <XAxis scale="point" hide />
                     <YAxis domain={domain} hide />
                     <Tooltip content={<CustomTooltip />} />
                     <Bar
