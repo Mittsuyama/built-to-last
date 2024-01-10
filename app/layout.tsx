@@ -31,7 +31,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div vaul-drawer-wrapper="true" className="bg-background">
+          <div vaul-drawer-wrapper="" className="bg-background w-full h-full">
             {children}
           </div>
         </ThemeProvider>

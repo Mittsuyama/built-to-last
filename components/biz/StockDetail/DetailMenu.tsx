@@ -21,7 +21,7 @@ interface StockDetailMenuProps {
 
 export const StockDetailMenu = memo<StockDetailMenuProps>(async ({ code, sType }) => {
   return (
-    <Drawer>
+    <Drawer onClose={() => document.body.style.background = ''}>
       <DrawerTrigger>
         <Menu className="mx-2 w-5 h-5" />
       </DrawerTrigger>
