@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ backgroundColor: 'hsl(var(--background))' }}>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
