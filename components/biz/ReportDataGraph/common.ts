@@ -124,8 +124,9 @@ export const getLineData = ({ reports, totals, accountItemKeys, minPercent }: Ge
         accountItemKeys,
         minPercent,
       });
-      const entries = items.map(({ type, percent }) => [type, percent]).concat([['year', items[0].year]]);
-      valueMap.set(items[0].year, Object.fromEntries(items.map(({ type, value }) => [type, value])));
+      const year = report['REPORT_YEAR'] as string;
+      const entries = items.map(({ type, percent }) => [type, percent]).concat([['year', year]]);
+      valueMap.set(year, Object.fromEntries(items.map(({ type, value }) => [type, value])));
       items.forEach(({ type }) => dataKeySet.add(type));
       return Object.fromEntries(entries) as Record<string, number>;
     })
