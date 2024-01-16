@@ -35,8 +35,9 @@ interface MllAndROEProps {
 export const MllAndROE = memo<MllAndROEProps>((props) => {
   const { reports } = props;
 
-  const roe = reports.map((item) => ({ name: item['REPORT_YEAR'], value: item['ROEKCJQ'] }))
-  const mll = reports.map((item) => ({ name: item['REPORT_YEAR'], value: item['XSMLL'] }))
+  const reversedReports = reports.map((_, index) => reports[reports.length - index - 1]);
+  const roe = reversedReports.map((item) => ({ name: item['REPORT_YEAR'], value: item['ROEKCJQ'] }))
+  const mll = reversedReports.map((item) => ({ name: item['REPORT_YEAR'], value: item['XSMLL'] }))
   const list = [
     {
       data: mll,
