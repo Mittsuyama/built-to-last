@@ -6,8 +6,8 @@ import {
   memo,
   useEffect,
   useState,
-  useMemo,
 } from 'react';
+import NProgress from 'nprogress';
 import { useMemoizedFn, useDebounceFn } from 'ahooks';
 import { useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
@@ -101,11 +101,8 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
         value={`${stockId}.${name}.${suffix}`}
         key={`${stockId}.${name}.${suffix}`}
         onSelect={() => {
-          const stock = list.find((item) => item.stockId == stockId);
-          if (stock) {
-            setLatest([stock, ...latest.filter(item => item.stockId !== stockId).slice(0, 5)]);
-            router.push(`/stock/${sType.toUpperCase()}/${code}`);
-          }
+          NProgress.start();
+          router.push(`/stock/${sType.toUpperCase()}/${code}`);
         }}
       >
         <Building2 className="mr-2 h-4 w-4" />

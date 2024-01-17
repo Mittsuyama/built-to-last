@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/components/ui/link-with-progress';
 import { AssetLine, ReportDataLineCard } from '@/components/biz/ReportDataGraph/Line';
 import { SheetType } from '@/components/biz/ReportDataGraph/common';
 import {

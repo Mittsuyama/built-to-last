@@ -1,9 +1,9 @@
 'use client';
 
 import { memo } from 'react';
-import Link from 'next/link';
 import { Menu, Dices, Github, Sheet, MessageSquareText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from '@/components/ui/link-with-progress';
 import {
   Drawer,
   DrawerContent,

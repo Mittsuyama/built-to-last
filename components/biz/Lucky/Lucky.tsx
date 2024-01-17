@@ -4,6 +4,7 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
+import NProgress from 'nprogress';
 import { useRouter } from 'next/navigation';
 import { useMemoizedFn, useMount } from 'ahooks';
 import { StockBaseInfo } from '@/types';
@@ -32,6 +33,7 @@ export const Lucky = memo<PropsWithChildren<{ className?: string }>>((props) => 
     }
     const pick = list[Math.floor(Math.random() * list.length)]
     const [code, sType] = pick.id.split('.');
+    NProgress.start();
     router.push(`/stock/${sType.toUpperCase()}/${code}`);
   });
 

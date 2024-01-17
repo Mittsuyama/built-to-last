@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/biz/layout/ThemeProvider';
+import { NextProgress } from '@/components/ui/next-progress';
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -31,7 +32,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div vaul-drawer-wrapper="" className="bg-background w-full h-full">
+          <NextProgress />
+          <div id="vaul-drawer-wrapper" vaul-drawer-wrapper="" className="bg-background w-full h-full overflow-auto">
             {children}
           </div>
         </ThemeProvider>
