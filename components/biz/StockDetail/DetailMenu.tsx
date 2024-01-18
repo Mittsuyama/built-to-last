@@ -9,6 +9,7 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
+  DrawerDescription,
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { ToggleFavButton } from '@/components/biz/stock/ToggleFavButton';
@@ -27,7 +28,8 @@ export const StockDetailMenu = memo<StockDetailMenuProps>(async ({ code, sType }
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>选择操作</DrawerTitle>
+          <DrawerTitle>更多...</DrawerTitle>
+          <DrawerDescription>选择需要的操作</DrawerDescription>
         </DrawerHeader>
         <div className="p-4 mb-[env(safe-area-inset)]">
           <Link

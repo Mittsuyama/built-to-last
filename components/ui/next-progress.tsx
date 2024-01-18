@@ -13,8 +13,6 @@ NProgress.configure({
   speed: 200,
 });
 
-const defaultColor = '#29d';
-
 export const NextProgress = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
