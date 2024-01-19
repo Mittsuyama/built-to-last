@@ -26,7 +26,7 @@ export const fetchLeadingIndex = async (stock: { sType: string; code: string }) 
   const response = await fetch(`${url}?${search.toString()}`, { cache: 'force-cache' });
   const res = await response.json();
 
-  if (!res.result.data) {
+  if (!res?.result?.data) {
     throw new Error('fetch leading indicators failed');
   }
 

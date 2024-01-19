@@ -18,6 +18,8 @@ export const searchStock = async (value: string): Promise<SearchStockItem[]> => 
       sType = 'SH';
     } else if (securityTypeName === '京A') {
       sType = 'BJ';
+    } else if (securityTypeName === '科创板') {
+      sType = 'SH';
     }
     return {
       stockId: `${item.code}.${sType}`,
