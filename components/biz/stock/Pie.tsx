@@ -62,7 +62,11 @@ const BizPie = memo((props: { data: BizItem[]; title: string; }) => {
               dataKey="MAIN_BUSINESS_INCOME"
             >
               {data.map((entry, index) => (
-                <Cell key={entry.ITEM_NAME} fill={`hsl(var(--primary) / ${1 / data.length * ((data.length - index - 1) % data.length + 1)})`} />
+                <Cell
+                  key={entry.ITEM_NAME}
+                  fill={`hsl(var(--primary) / ${1 / data.length * ((data.length - index - 1) % data.length + 1)})`}
+                  stroke="hsl(var(--primary-foreground))"
+                />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip total={total} />} />

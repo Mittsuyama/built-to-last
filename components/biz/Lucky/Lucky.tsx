@@ -1,12 +1,20 @@
 'use client';
+
 import {
   memo,
   useState,
   type PropsWithChildren,
+  useEffect,
 } from 'react';
 import NProgress from 'nprogress';
 import { useRouter } from 'next/navigation';
 import { useMemoizedFn, useMount } from 'ahooks';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { StockBaseInfo } from '@/types';
 import { fetchStockBaseInfoListByFilter } from './fetchBaseInfoList';
 
@@ -37,9 +45,48 @@ export const Lucky = memo<PropsWithChildren<{ className?: string }>>((props) => 
     router.push(`/stock/${sType.toUpperCase()}/${code}`);
   });
 
+  const keyDownHandler = useMemoizedFn((e: KeyboardEvent) => {
+    if (e.key === 'i' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      onClick();
+    }
+  })
+
+  useEffect(
+    () => {
+      // keypress 针对 safari 场景
+      document.addEventListener('keypress', keyDownHandler);
+      document.addEventListener('keydown', keyDownHandler);
+      return () => {
+        document.removeEventListener('keypress', keyDownHandler);
+        document.removeEventListener('keydown', keyDownHandler);
+      };
+    },
+    [keyDownHandler],
+  );
+
   return (
     <div onClick={onClick} className={className}>
-      {children}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {children}
+          </TooltipTrigger>
+          <TooltipContent>
+            <div className="flex items-center">
+              <div>
+                快捷键：
+              </div>
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 pt-[1px] font-mono text-sm font-medium text-muted-foreground opacity-100">
+                <span className="text-lg">⌘</span>
+                <span>
+                  U
+                </span>
+              </kbd>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 });

@@ -32,7 +32,9 @@ export const AnualReportList = memo<AnualReportListProps>(async ({ code }) => {
     s_node: '1',
   });
   const res = await (await fetch(`${url}?${search.toString()}`)).json();
-  const list = (res.data.list as AnnItem[]).filter((item) => item.title.endsWith('年年度报告'));
+  const list = (res.data.list as AnnItem[])
+    .filter((item) => item.title.indexOf('年度报告') !== -1)
+    .filter((item) => item.title.indexOf('半年') === -1);
 
   return (
     <Card className="h-full flex flex-col">
@@ -51,7 +53,7 @@ export const AnualReportList = memo<AnualReportListProps>(async ({ code }) => {
                   title={`${Number(notice_date.split(' ')[0].split('-')[0]) - 1} - ${title}`}
                 />
               </div>
-              <div className="flex-none text-muted-foreground text-sm hidden md:block">
+              <div className="flex-none text-muted-foreground text-sm hidden lg:block">
                 {notice_date.split(' ')[0]}
               </div>
             </div>

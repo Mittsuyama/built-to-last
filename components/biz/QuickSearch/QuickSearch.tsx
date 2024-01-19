@@ -9,7 +9,7 @@ import {
 } from 'react';
 import NProgress from 'nprogress';
 import { useMemoizedFn, useDebounceFn } from 'ahooks';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -44,7 +44,7 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
   const [value, setValue] = useState('');
   const [open, setOpen] = useState(false);
   const favStockList = useAtomValue(favStockListAtom);
-  const [latest, setLatest] = useAtom(latestSearchAtom);
+  const latest = useAtomValue(latestSearchAtom);
   const [searching, setSearching] = useState(false);
   const [res, setRes] = useState<SearchStockItem[]>([]);
 
@@ -59,8 +59,11 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
 
   useEffect(
     () => {
+      // keypress 针对 safari 场景
+      document.addEventListener('keypress', keyDownHandler);
       document.addEventListener('keydown', keyDownHandler);
       return () => {
+        document.removeEventListener('keypress', keyDownHandler);
         document.removeEventListener('keydown', keyDownHandler);
       };
     },

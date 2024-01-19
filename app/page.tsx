@@ -12,12 +12,12 @@ export default async function Home() {
         基业长青
       </div>
       <GoodSentences seed={Math.random()} />
-      <div className="text-gray-500 flex items-center gap-4 lg:gap-8">
+      <div className="text-gray-500 flex items-center gap-2 lg:gap-4">
         <SearchButton />
         <Lucky>
-          <Button variant="outline">
+          <Button variant="outline" className="inline-flex items-center gap-2">
+            <Dices className="w-4 h-4" />
             手气不错
-            <Dices className="ml-2" />
           </Button>
         </Lucky>
       </div>

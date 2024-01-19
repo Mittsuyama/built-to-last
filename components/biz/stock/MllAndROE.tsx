@@ -77,7 +77,7 @@ export const MllAndROE = memo<MllAndROEProps>((props) => {
                     <Bar
                       activeBar={{ fill: 'hsl(var(--primary) / 0.5)' }}
                       dataKey="value"
-                      fill="hsl(var(--primary)"
+                      fill="hsl(var(--primary))"
                       background={{ fill: 'hsl(var(--background))' }}
                     />
                   </BarChart>
