@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { Menu, Dices, Github, Sheet, MessageSquareText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/components/ui/link-with-progress';
@@ -11,6 +11,7 @@ import {
   DrawerTitle,
   DrawerDescription,
   DrawerTrigger,
+  DrawerClose,
 } from '@/components/ui/drawer';
 import { ToggleFavButton } from '@/components/biz/stock/ToggleFavButton';
 import { Lucky } from '@/components/biz/Lucky/Lucky';
@@ -21,17 +22,23 @@ interface StockDetailMenuProps {
 }
 
 export const StockDetailMenu = memo<StockDetailMenuProps>(async ({ code, sType }) => {
+  const closerRef = useRef<HTMLButtonElement>(null);
+
   return (
     <Drawer onClose={() => document.body.style.background = ''}>
       <DrawerTrigger>
         <Menu className="mx-2 w-5 h-5" />
       </DrawerTrigger>
       <DrawerContent>
+        <DrawerClose ref={closerRef} className="hidden" />
         <DrawerHeader>
           <DrawerTitle>更多...</DrawerTitle>
           <DrawerDescription>选择需要的操作</DrawerDescription>
         </DrawerHeader>
-        <div className="p-4 mb-[env(safe-area-inset)]">
+        <div
+          className="p-4 mb-[env(safe-area-inset)]"
+          onClick={() => closerRef.current?.click()}
+        >
           <Link
             className="block"
             href={`https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=${sType}${code}#/cwfx`}
