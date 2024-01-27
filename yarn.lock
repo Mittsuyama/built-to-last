@@ -240,7 +240,7 @@
 
 "@radix-ui/react-alert-dialog@^1.0.5":
   version "1.0.5"
-  resolved "https://bnpm.byted.org/@radix-ui/react-alert-dialog/-/react-alert-dialog-1.0.5.tgz#70dd529cbf1e4bff386814d3776901fcaa131b8c"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-alert-dialog/-/react-alert-dialog-1.0.5.tgz#70dd529cbf1e4bff386814d3776901fcaa131b8c"
   integrity sha512-OrVIOcZL0tl6xibeuGt5/+UxoT2N27KCFOPjFyfXMnchxSHZ/OW7cCX2nGlIYJrbHK/fczPcFzAwvNBB6XBNMA==
   dependencies:
     "@babel/runtime" "^7.13.10"
@@ -764,7 +764,7 @@
 
 "@types/pangu@^4.0.2":
   version "4.0.2"
-  resolved "https://bnpm.byted.org/@types/pangu/-/pangu-4.0.2.tgz#25ffca80bef90fa408a5072f6e019783079a070c"
+  resolved "https://registry.yarnpkg.com/@types/pangu/-/pangu-4.0.2.tgz#25ffca80bef90fa408a5072f6e019783079a070c"
   integrity sha512-rVwVCkOFTWpmBjZuxTiVhLE8cwIKff3jWEKjs+DDg6bMkQwjp9Bp03pNanHQTtTzP53SDHJutb/kfGFHNhOJaQ==
 
 "@types/prop-types@*":
@@ -2656,7 +2656,7 @@ p-locate@^5.0.0:
 
 pangu@^4.0.7:
   version "4.0.7"
-  resolved "https://bnpm.byted.org/pangu/-/pangu-4.0.7.tgz#2a40347733b004a040d011de460cc313c10391c9"
+  resolved "https://registry.yarnpkg.com/pangu/-/pangu-4.0.7.tgz#2a40347733b004a040d011de460cc313c10391c9"
   integrity sha512-weZKJIwwy5gjt4STGVUH9bix3BGk7wZ2ahtIypwe3e/mllsrIZIvtfLx1dPX56GcpZFOCFKmeqI1qVuB9enRzA==
 
 parent-module@^1.0.0:
