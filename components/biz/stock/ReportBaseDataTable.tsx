@@ -29,7 +29,7 @@ const ReportBaseDataTable = memo<ReportBaseDataTableProps>(async ({ stockId, nam
   const names = [name, '行业平均', '行业中值'];
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="text-base lg:text-xl">
           同行比较

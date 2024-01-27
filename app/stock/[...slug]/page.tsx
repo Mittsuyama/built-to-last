@@ -25,7 +25,7 @@ const StockInfoPage = memo<StockInfoPageProps>(async (props) => {
             <StockDetailMenu code={code} sType={sType} />
           </div>
           <Link
-            className="font-extrabold font-serif tracking-wide md:px-2 text-primary hover:text-primary/80"
+            className="font-extrabold tracking-wide md:px-2 text-primary hover:text-primary/80"
             href="/"
           >
             基业长青

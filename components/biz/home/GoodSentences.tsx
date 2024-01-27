@@ -52,7 +52,7 @@ export const GoodSentences = memo<GoodSentencesProps>((props) => {
 
   return (
     <div
-      className="w-full lg:w-[800px] text-lg lg:text-xl text-primary/40 font-serif hover:text-zinc-400/80 active:text-zinc-400/60 text-start lg:text-center cursor-default"
+      className="w-full lg:w-[800px] text-lg lg:text-xl text-muted-foreground hover:text-zinc-400/80 active:text-zinc-400/60 text-start lg:text-center cursor-default"
       onClick={onClick}
     >
       {sentences[index]}

@@ -3,13 +3,13 @@ import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from '@/components/ui/link-with-progress';
+import { Spin } from '@/components/ui/Spin';
 import { AssetLine, ReportDataLineCard } from '@/components/biz/ReportDataGraph/Line';
 import { SheetType } from '@/components/biz/ReportDataGraph/common';
 import {
-  AnualReportList,
+  SimpleCFC,
   ClientSideTitle,
   ToggleFavButton,
-  Business,
   MllAndROE,
   ProfitabilityCard,
 } from '@/components/biz/stock';
@@ -24,19 +24,17 @@ interface StockInfoPageProps {
   };
 }
 
-const ReportBaseDataTable = dynamic(
-  () => import('@/components/biz/stock/ReportBaseDataTable'),
-  {
-    loading: () => null,
-  },
+const loadingCard = (
+  <div className="w-full h-full flex items-center justify-center">
+    <Spin />
+  </div>
 );
 
-const StockBaseInfo = dynamic(
-  () => import('@/components/biz/stock/StockBaseInfo'),
-  {
-    loading: () => null,
-  },
-);
+const ReportBaseDataTable = dynamic(() => import('@/components/biz/stock/ReportBaseDataTable'), { loading: () => loadingCard });
+const StockBaseInfo = dynamic(() => import('@/components/biz/stock/StockBaseInfo'), { loading: () => null });
+const AnualReportList = dynamic(() => import('@/components/biz/stock/AnualReportList'), { loading: () => loadingCard })
+const Business = dynamic(() => import('@/components/biz/stock/Business'), { loading: () => loadingCard });
+const BusinessReview = dynamic(() => import('@/components/biz/stock/BusinessReview'), { loading: () => loadingCard });
 
 const fetchStockInfo = async (props: StockInfoPageProps) => {
   const { params } = props;
@@ -139,7 +137,7 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6 items-stretch">
         <div className="lg:col-span-3 grid md:grid-cols-2 lg:grid-cols-2 gap-6 items-stretch">
-          <div className="min-h-[330px]">
+          <div className="min-h-[340px]">
             <ReportDataLineCard
               reports={reports}
               title="现金流量表"
@@ -150,12 +148,33 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
               ]}
             />
           </div>
-          <div className="h-[330px] overflow-x-hidden">
+          <div className="h-[340px]">
             <AnualReportList code={code} />
           </div>
         </div>
-        <div className="lg:col-span-2 h-[330px]">
+        <div className="lg:col-span-2 h-[340px]">
           <ReportBaseDataTable name={name} stockId={stockId} industry={industry} />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4 md:mb-6 items-stretch">
+        <div className="h-[300px]">
+          <BusinessReview stockId={stockId} />
+        </div>
+        <div className="h-[300px]">
+          <SimpleCFC reports={reports} />
+        </div>
+        <div className="h-[300px]">
+          <ReportDataLineCard
+            reports={reports}
+            title="现金流和利润相关数据"
+            accountItemKeys={[
+              'x-jyhdcsdxjllje-经营活动产生的现金流量净额',
+              'l-yywsr-营业外收入',
+              'l-yywzc-营业外支出',
+              'x-gdzczjyqzczhscxswzczj-固定资产折旧、油气资产折耗、生产性生物资产折旧',
+              'x-wxzctx-无形资产摊销',
+            ]}
+          />
         </div>
       </div>
     </>

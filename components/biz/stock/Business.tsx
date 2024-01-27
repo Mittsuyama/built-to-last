@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import cls from 'classnames';
 import {
   Card,
   CardContent,
@@ -14,7 +13,7 @@ interface BusinessProps {
   stockId: string;
 }
 
-export const Business = memo<BusinessProps>(async ({ stockId }) => {
+const Business = memo<BusinessProps>(async ({ stockId }) => {
   const { bizListByDistrict, bizListByProduct } = await fetchBusiness(stockId);
 
   return (
@@ -40,4 +39,6 @@ export const Business = memo<BusinessProps>(async ({ stockId }) => {
 });
 
 Business.displayName = 'Business';
+
+export default Business;
 

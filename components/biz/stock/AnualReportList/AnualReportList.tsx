@@ -33,7 +33,7 @@ export const AnualReportList = memo<AnualReportListProps>(async ({ code }) => {
   });
   const res = await (await fetch(`${url}?${search.toString()}`)).json();
   const list = (res.data.list as AnnItem[])
-    .filter((item) => item.title.indexOf('年度报告') !== -1)
+    .filter((item) => item.title.endsWith('年度报告'))
     .filter((item) => item.title.indexOf('半年') === -1);
 
   return (

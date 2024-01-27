@@ -21,7 +21,7 @@ interface StockDetailMenuProps {
   sType: string;
 }
 
-export const StockDetailMenu = memo<StockDetailMenuProps>(async ({ code, sType }) => {
+export const StockDetailMenu = memo<StockDetailMenuProps>(({ code, sType }) => {
   const closerRef = useRef<HTMLButtonElement>(null);
 
   return (

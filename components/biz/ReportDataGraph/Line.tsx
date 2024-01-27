@@ -59,16 +59,28 @@ const CustomTooltip = ({ active, payload, valueMap, hiddenPercent }: CustomToolt
   return null;
 };
 
+interface ExtraData {
+  year: string;
+}
+
 interface ReportDataLineCardProps extends CommonGraphProps {
   title: ReactNode;
   desc?: ReactNode;
   totals?: number[];
   accountItemKeys: Array<keyof typeof ACCOUNT_ITEM>;
   minPercent?: number;
+  extraData?: ExtraData[];
 }
 
 export const ReportDataLineCard = memo<ReportDataLineCardProps>((props) => {
-  const { title, desc, totals, reports, accountItemKeys, minPercent  } = props;
+  const {
+    title,
+    desc,
+    totals,
+    reports,
+    accountItemKeys,
+    minPercent,
+  } = props;
 
   const { data, dataKeys, valueMap } = useMemo(
     () => getLineData({ reports, accountItemKeys, totals, minPercent }),

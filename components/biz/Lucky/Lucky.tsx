@@ -29,7 +29,7 @@ export const Lucky = memo<PropsWithChildren<{ className?: string }>>((props) => 
     const res = await fetchStockBaseInfoListByFilter({
       maxPe: 25,
       minPe: 0,
-      minTotalMarketCAP: 20_000_000_000,
+      minTotalMarketCAP: 10_000_000_000,
       minROE: 10,
     });
     setList(res);
