@@ -30,8 +30,8 @@ const loadingCard = (
   </div>
 );
 
-const ReportBaseDataTable = dynamic(() => import('@/components/biz/stock/ReportBaseDataTable'), { loading: () => loadingCard });
 const StockBaseInfo = dynamic(() => import('@/components/biz/stock/StockBaseInfo'), { loading: () => null });
+const ReportBaseDataTable = dynamic(() => import('@/components/biz/stock/ReportBaseDataTable'), { loading: () => loadingCard });
 const AnualReportList = dynamic(() => import('@/components/biz/stock/AnualReportList'), { loading: () => loadingCard })
 const Business = dynamic(() => import('@/components/biz/stock/Business'), { loading: () => loadingCard });
 const BusinessReview = dynamic(() => import('@/components/biz/stock/BusinessReview'), { loading: () => loadingCard });
@@ -135,27 +135,6 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6 items-stretch">
-        <div className="lg:col-span-3 grid md:grid-cols-2 lg:grid-cols-2 gap-6 items-stretch">
-          <div className="min-h-[340px]">
-            <ReportDataLineCard
-              reports={reports}
-              title="现金流量表"
-              accountItemKeys={[
-                'x-jyhdcsdxjllje-经营活动产生的现金流量净额',
-                'x-tzhdcsdxjllje-投资活动产生的现金流量净额',
-                'x-czhdcsdxjllje-筹资活动产生的现金流量净额',
-              ]}
-            />
-          </div>
-          <div className="h-[340px]">
-            <AnualReportList code={code} />
-          </div>
-        </div>
-        <div className="lg:col-span-2 h-[340px]">
-          <ReportBaseDataTable name={name} stockId={stockId} industry={industry} />
-        </div>
-      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4 md:mb-6 items-stretch">
         <div className="h-[300px]">
           <BusinessReview stockId={stockId} />
@@ -175,6 +154,27 @@ const StockDetail = memo<StockInfoPageProps>(async (props) => {
               'x-wxzctx-无形资产摊销',
             ]}
           />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-4 md:mb-6 items-stretch">
+        <div className="lg:col-span-3 grid md:grid-cols-2 lg:grid-cols-2 gap-6 items-stretch">
+          <div className="min-h-[340px]">
+            <ReportDataLineCard
+              reports={reports}
+              title="现金流量表"
+              accountItemKeys={[
+                'x-jyhdcsdxjllje-经营活动产生的现金流量净额',
+                'x-tzhdcsdxjllje-投资活动产生的现金流量净额',
+                'x-czhdcsdxjllje-筹资活动产生的现金流量净额',
+              ]}
+            />
+          </div>
+          <div className="h-[340px]">
+            <AnualReportList code={code} />
+          </div>
+        </div>
+        <div className="lg:col-span-2 h-[340px]">
+          <ReportBaseDataTable name={name} stockId={stockId} industry={industry} />
         </div>
       </div>
     </>
