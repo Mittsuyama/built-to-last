@@ -1,7 +1,7 @@
 'use client';
 import { memo, useMemo } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { BizItem } from './fetchBusiness';
+import { BizItem } from './Business';
 import { formatFinancialNumber } from '@/lib/format';
 
 interface CustomTooltipProps {
