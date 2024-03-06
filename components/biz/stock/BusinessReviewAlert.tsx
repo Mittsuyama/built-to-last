@@ -22,7 +22,7 @@ export const BusinessReviewAlert = memo<BusinessReviewAlertProps>(({ reviewSente
     <AlertDialog>
       <AlertDialogTrigger>
         <span className="text-muted-foreground hover:underline text-sm cursor-pointer underline-offset-4">
-          弹窗显示
+          更多
         </span>
       </AlertDialogTrigger>
       <AlertDialogContent className="max-w-[unset] w-[calc(100vw-50px)] lg:w-[900px]">
@@ -42,7 +42,7 @@ export const BusinessReviewAlert = memo<BusinessReviewAlertProps>(({ reviewSente
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>关闭弹窗</AlertDialogAction>
+          <AlertDialogAction>关闭</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

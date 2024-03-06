@@ -132,7 +132,7 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
                   <Spin className="block my-4" />
                 </CommandList>
               )
-              : value && !res.length
+              : value && !res?.length
                 ? (
                   <CommandList key="no-result">
                     <div className="my-4 flex justify-center items-center text-sm">
@@ -142,17 +142,17 @@ export const QuickSearch = memo<PropsWithChildren<{}>>((props) => {
                  )
                  : (
                     <CommandList key="has-result">
-                      {!!res.length && (
+                      {!!res?.length && (
                         <CommandGroup heading="搜索结果">
                           {searchStockItemRender(res, 'res')}
                         </CommandGroup>
                       )}
-                      {!!latest.length && !value && (
+                      {!!latest?.length && !value && (
                         <CommandGroup heading="最近搜索">
                           {searchStockItemRender(latest, 'latest')}
                         </CommandGroup>
                       )}
-                      {!value && !!favStockList.length && (
+                      {!value && !!favStockList?.length && (
                         <CommandGroup heading="收藏内容">
                           {searchStockItemRender(favStockList, 'fav')}
                         </CommandGroup>
